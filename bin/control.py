@@ -23,7 +23,7 @@ class MainWindow(object):
         self.ui.pushButton_3.clicked.connect(self.ui.execute)
 
 
-        self.ui.initialize()
+        # self.ui.initialize()
 
         MainWindow.show()
         sys.exit(app.exec_())

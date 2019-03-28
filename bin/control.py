@@ -21,6 +21,11 @@ class MainWindow(object):
         self.ui.pushButton.clicked.connect(self.ui.initialize)
         self.ui.pushButton_2.clicked.connect(self.ui.stop)
         self.ui.pushButton_3.clicked.connect(self.ui.execute)
+        self.ui.pushButton_4.clicked.connect(self.ui.run_pump_1)
+        self.ui.pushButton_5.clicked.connect(self.ui.run_pump_2)
+        self.ui.pushButton_6.clicked.connect(self.ui.run_pump_3)
+        self.ui.pushButton_7.clicked.connect(self.ui.run_pump_4)
+
 
 
         # self.ui.initialize()

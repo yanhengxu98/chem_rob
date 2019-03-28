@@ -61,7 +61,8 @@ class InputDialog(QWidget):
         initButton = QPushButton("初始化")
         initButton.clicked.connect(initialize)
 
-
+        pump_button1 = QPushButton("蠕动泵1")
+        initButton.clicked.connect(self.run_pump_1)
 
 
         mainLayout=QGridLayout()
@@ -77,6 +78,7 @@ class InputDialog(QWidget):
         mainLayout.addWidget(executeButton, 3, 1)
         mainLayout.addWidget(stopButton, 4, 1)
         mainLayout.addWidget(initButton, 5, 1)
+        mainLayout.addWidget(pump_button1, 6, 1)
 
         self.setLayout(mainLayout)
 
@@ -149,6 +151,20 @@ class InputDialog(QWidget):
 
         ser.close()  # 关闭串口
 
+    def run_pump_2(self):
+        order = "p2"
+        result = ser.write(order.encode("gb2312"))
+        print("写字节总数：", result)
+
+    def run_pump_3(self):
+        order = "p3"
+        result = ser.write(order.encode("gb2312"))
+        print("写字节总数：", result)
+
+    def run_pump_4(self):
+        order = "p4"
+        result = ser.write(order.encode("gb2312"))
+        print("写字节总数：", result)
 
 def open_serial():
     # 端口，GNU / Linux上的/ dev / ttyUSB0 等 或 Windows上的 COM3 等

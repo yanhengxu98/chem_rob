@@ -25,7 +25,7 @@ class MainWindow(object):
         self.ui.pushButton_5.clicked.connect(self.ui.run_pump_2)
         self.ui.pushButton_6.clicked.connect(self.ui.run_pump_3)
         self.ui.pushButton_7.clicked.connect(self.ui.run_pump_4)
-
+        self.ui.pushButton_8.clicked.connect(self.ui.spectrum_analysis)
 
 
         # self.ui.initialize()

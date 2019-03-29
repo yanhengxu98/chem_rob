@@ -9,6 +9,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import serial
 import time
+from spectrum import Filtering
 
 
 class Ui_MainWindow(object):
@@ -124,6 +125,10 @@ class Ui_MainWindow(object):
         self.pushButton_7.setGeometry(QtCore.QRect(560, 600, 112, 34))
         self.pushButton_7.setObjectName("pushButton_7")
 
+        self.pushButton_8 = QtWidgets.QPushButton(self.groupBox)
+        self.pushButton_8.setGeometry(QtCore.QRect(300, 660, 112, 34))
+        self.pushButton_8.setObjectName("pushButton_8")
+
         self.groupBox_2 = QtWidgets.QGroupBox(self.tab)
         self.groupBox_2.setGeometry(QtCore.QRect(720, 10, 441, 681))
         self.groupBox_2.setObjectName("groupBox_2")
@@ -211,6 +216,7 @@ class Ui_MainWindow(object):
         self.pushButton_5.setText(_translate("MainWindow", "蠕动泵2"))
         self.pushButton_6.setText(_translate("MainWindow", "蠕动泵3"))
         self.pushButton_7.setText(_translate("MainWindow", "蠕动泵4"))
+        self.pushButton_8.setText(_translate("MainWindow", "光谱分析"))
         self.groupBox_2.setTitle(_translate("MainWindow", "泵切换与端口控制"))
         self.label_5.setText(_translate("MainWindow", "泵编号"))
         self.label_6.setText(_translate("MainWindow", "端口号"))
@@ -358,6 +364,8 @@ class Ui_MainWindow(object):
         result1 = ser.write(order.encode("gb2312"))
         print("写字节总数：", result)
 
+    def spectrum_analysis(self):
+        Filtering.spectrum_analysis()
 
 
 

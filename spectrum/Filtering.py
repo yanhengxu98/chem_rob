@@ -143,28 +143,18 @@ def _2gaussian(x, amp1, cen1, sigma1, amp2, cen2, sigma2):
            amp2*(1/(sigma2*(np.sqrt(2*np.pi))))*(np.exp(-((x-cen2)**2)/((2*sigma2)**2)))
 
 
-if __name__ == '__main__':
+def spectrum_analysis():
     x, y = import_data_txt("./spectrum/sample.txt")
     filtered_y = savgol(y, 9, 3)
     for i in range(0, 25):
         filtered_y = savgol(filtered_y, 9, 3)
     fig = plt.figure(figsize=(8, 6), dpi=300)
-    # plt.scatter(x, y, color='r', marker='.')
     plt.plot(x, filtered_y, color='r', label="spectrum")
-
     peaks, troughs = find_peak_and_trough(x, filtered_y)
     xpk, lpx, rpx, hww, pi = calculate_half_wave_width(peaks, troughs, x, filtered_y)
     fitting_x = x[(xpk + lpx) // 2:(rpx + xpk) // 2]
     fitting_y = filtered_y[(xpk + lpx) // 2:(rpx + xpk) // 2]
-    # for k in range(len(fitting_y)):
-    #     fitting_y[k] = fitting_y[k] - 0.48
     print("The half wave width is %f nm. \nThe peak intensity is %f dB." % (hww, pi))
-    # plt.annotate("(%.3f,%.3f)" % (x[lpx], filtered_y[lpx]), xy=(x[lpx], filtered_y[lpx]),
-    #              xytext=(-100, 0), textcoords='offset points',
-    #              arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
-    # plt.annotate("(%.3f,%.3f)" % (x[rpx], filtered_y[rpx]), xy=(x[rpx], filtered_y[rpx]),
-    #              xytext=(+30, 0), textcoords='offset points',
-    #              arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
     plt.plot([x[lpx], x[rpx]], [filtered_y[lpx], filtered_y[lpx]], color='black',
              linewidth=2.5, linestyle='--', marker='.')
     plt.annotate("hww = %.3f" % (x[rpx] - x[lpx]), xy=((x[rpx] + x[lpx]) / 2, filtered_y[rpx]),
@@ -172,17 +162,54 @@ if __name__ == '__main__':
     plt.annotate("(%.3f,%.3f)" % (x[xpk], pi), xy=(x[xpk], pi),
                  xytext=(+30, 0), textcoords='offset points',
                  arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
-
     popt_gauss, pcov_gauss = scipy.optimize.curve_fit(_1gaussian, fitting_x, fitting_y, p0=[90, 545, 60])
-    #
-    # popt_2gauss, pcov_2gauss = scipy.optimize.curve_fit(_2gaussian, fitting_x, fitting_y,
-    #                                                     p0=[100, 520, 100, 100, 570, 100])
     print(popt_gauss)
     y2 = [_1gaussian(i, popt_gauss[0], popt_gauss[1], popt_gauss[2]) for i in x[2 * lpx - xpk: 3 * xpk - 2 * lpx]]
-    # y3 = [_1gaussian(i, popt_2gauss[3], popt_2gauss[4], popt_2gauss[5]) for i in x]
     plt.plot(x[2 * lpx - xpk: 3 * xpk - 2 * lpx], y2, color='blue', linestyle='--')
-    # plt.plot(x, y3, color='green', linestyle='--')
     plt.show()
-    # plt.savefig("aaa.png")
-    perr_gauss = np.sqrt(np.diag(pcov_gauss))
+    # perr_gauss = np.sqrt(np.diag(pcov_gauss))
+
+
+# if __name__ == '__main__':
+#     x, y = import_data_txt("./spectrum/sample.txt")
+#     filtered_y = savgol(y, 9, 3)
+#     for i in range(0, 25):
+#         filtered_y = savgol(filtered_y, 9, 3)
+#     fig = plt.figure(figsize=(8, 6), dpi=300)
+#     # plt.scatter(x, y, color='r', marker='.')
+#     plt.plot(x, filtered_y, color='r', label="spectrum")
+#
+#     peaks, troughs = find_peak_and_trough(x, filtered_y)
+#     xpk, lpx, rpx, hww, pi = calculate_half_wave_width(peaks, troughs, x, filtered_y)
+#     fitting_x = x[(xpk + lpx) // 2:(rpx + xpk) // 2]
+#     fitting_y = filtered_y[(xpk + lpx) // 2:(rpx + xpk) // 2]
+#     # for k in range(len(fitting_y)):
+#     #     fitting_y[k] = fitting_y[k] - 0.48
+#     print("The half wave width is %f nm. \nThe peak intensity is %f dB." % (hww, pi))
+#     # plt.annotate("(%.3f,%.3f)" % (x[lpx], filtered_y[lpx]), xy=(x[lpx], filtered_y[lpx]),
+#     #              xytext=(-100, 0), textcoords='offset points',
+#     #              arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
+#     # plt.annotate("(%.3f,%.3f)" % (x[rpx], filtered_y[rpx]), xy=(x[rpx], filtered_y[rpx]),
+#     #              xytext=(+30, 0), textcoords='offset points',
+#     #              arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
+#     plt.plot([x[lpx], x[rpx]], [filtered_y[lpx], filtered_y[lpx]], color='black',
+#              linewidth=2.5, linestyle='--', marker='.')
+#     plt.annotate("hww = %.3f" % (x[rpx] - x[lpx]), xy=((x[rpx] + x[lpx]) / 2, filtered_y[rpx]),
+#                  xytext=(-30, -20), textcoords='offset points')
+#     plt.annotate("(%.3f,%.3f)" % (x[xpk], pi), xy=(x[xpk], pi),
+#                  xytext=(+30, 0), textcoords='offset points',
+#                  arrowprops=dict(arrowstyle="->", connectionstyle="arc3,rad=.2"))
+#
+#     popt_gauss, pcov_gauss = scipy.optimize.curve_fit(_1gaussian, fitting_x, fitting_y, p0=[90, 545, 60])
+#     #
+#     # popt_2gauss, pcov_2gauss = scipy.optimize.curve_fit(_2gaussian, fitting_x, fitting_y,
+#     #                                                     p0=[100, 520, 100, 100, 570, 100])
+#     print(popt_gauss)
+#     y2 = [_1gaussian(i, popt_gauss[0], popt_gauss[1], popt_gauss[2]) for i in x[2 * lpx - xpk: 3 * xpk - 2 * lpx]]
+#     # y3 = [_1gaussian(i, popt_2gauss[3], popt_2gauss[4], popt_2gauss[5]) for i in x]
+#     plt.plot(x[2 * lpx - xpk: 3 * xpk - 2 * lpx], y2, color='blue', linestyle='--')
+#     # plt.plot(x, y3, color='green', linestyle='--')
+#     plt.show()
+#     # plt.savefig("aaa.png")
+#     perr_gauss = np.sqrt(np.diag(pcov_gauss))
 

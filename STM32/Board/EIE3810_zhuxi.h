@@ -27,6 +27,10 @@ extern u8 Tenth_bit;
 extern u8 One_bit;
 extern u8 Point_bit;
 
+extern u8 Start_Tenth_bit;
+extern u8 Start_One_bit;
+extern u8 Start_Point_bit;
+
 extern u8 Pump_Jinyang_Flag;                        //  蠕动泵进样标志
 extern u8 System_Heat_Flag;                         //  系统加热标志  
 

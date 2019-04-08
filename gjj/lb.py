@@ -61,6 +61,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_3.clicked.connect(self.execute)
         self.rdb_exec.clicked.connect(self.run__pumb)
         self.rdb_clean.clicked.connect(self.clean_pumb)
+        self.Data_reaction.clicked.connect(self.auto_reaction)
+
 
 
         #self.initialize()
@@ -292,14 +294,14 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         ser.close()  # 关闭串口
 
 
-
     def run__pumb(self):
         ser = self.open_pump_serial()
         startlist = [self.rdb1_start.text(),self.rdb2_start.text(),self.rdb3_start.text(),self.rdb4_start.text()]
         endlist = [self.rdb1_end.text(),self.rdb2_end.text(),self.rdb3_end.text(),self.rdb4_end.text()]
         
-        for i in range(0,4):
+        for i in range(0, 4):
             if (len(startlist[i]) != 0) and (len(endlist[i]) != 0):
+                time.sleep(0.1)
                 rdbstart = float(startlist[i])
                 rdbend = float(endlist[i])
                 if rdbstart>=rdbend:
@@ -311,22 +313,56 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                     # order = "#p"+str(i+1)+str(rdbstart*10)+str(int(time1*10))
                     print(order)
                     result = ser.write(order.encode("gb2312"))
-                    time.sleep(0.5)
+                    time.sleep(0.1)
                     result1 = ser.write(order.encode("gb2312"))
                     print("写字节总数：", result) 
 
             elif (len(self.rdb1_end.text()) == 0) and (len(self.rdb1_start.text()) != 0):
+                time.sleep(0.1)
                 rdb1start = float(self.rdb1_start.text())
                 order = "#p"+str(i) + str(rdb1start)+str(999)
                 result = ser.write(order.encode("gb2312"))
-                time.sleep(0.5)
+                time.sleep(0.1)
                 result1 = ser.write(order.encode("gb2312"))
                 print("写字节总数：", result) 
 
 
     def clean_pumb(self):
+        ser = self.open_pump_serial()
+        order = "#p1000300"
+        print(order)
+        result = ser.write(order.encode("gb2312"))
+        time.sleep(0.1)
+        result1 = ser.write(order.encode("gb2312"))
+        time.sleep(0.1)
+        order2 = "#p2300300"
+        print(order2)
+        result2 = ser.write(order2.encode("gb2312"))
+        time.sleep(0.1)
+        result3 = ser.write(order2.encode("gb2312"))
+
+
+    def absorb(self):
         return
 
+    def auto_reaction(self):
+        # pump = 1
+        with self.connection.cursor() as cursor:
+            sql = "SELECT * FROM `反应全程`"
+            cursor.execute(sql)
+            self.result = cursor.fetchall()
+
+
+            a = list(self.result[0].values())
+
+            print(a[3])
+            ser = self.open_pump_serial()
+            order = "#p1000%03d" % (a[3] * int(10))
+            order2 = "#"
+            result2 = ser.write(order.encode("gb2312"))
+            time.sleep(0.1)
+            result3 = ser.write(order.encode("gb2312"))
+            time.sleep(0.1)
 
 if __name__ == "__main__":
     

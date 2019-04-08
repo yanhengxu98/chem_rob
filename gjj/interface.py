@@ -321,7 +321,7 @@ class Ui_MainWindow(object):
         self.label_13 = QtWidgets.QLabel(self.tab_3)
         self.label_13.setGeometry(QtCore.QRect(80, 190, 961, 491))
         self.label_13.setText("")
-        self.label_13.setPixmap(QtGui.QPixmap("G:/图库/11-17-01-90-7.jpg"))
+        #self.label_13.setPixmap(QtGui.QPixmap("G:/图库/11-17-01-90-7.jpg"))
         self.label_13.setObjectName("label_13")
         self.tabwidget2.addTab(self.tab_3, "")
         MainWindow.setCentralWidget(self.centralwidget)

@@ -8,6 +8,15 @@ from PyQt5.QtGui import *
 import pymysql
 import serial
 import time
+import xlrd
+import xlwt
+'''
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import TextConverter
+from pdfminer.layout import LAParams
+from pdfminer.pdfparser import PDFPage'''
+from io import StringIO
+from Integrate import *
 
 
 
@@ -32,6 +41,11 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.Datatable.setColumnWidth(0,55)
         self.xianzhi = QIntValidator(self)
         self.Data_N_tv.setValidator(self.xianzhi)
+        self.pump1.setValidator(self.xianzhi)
+        self.pump2.setValidator(self.xianzhi)
+        self.pump3.setValidator(self.xianzhi)
+        self.Data_peizhi.setValidator(self.xianzhi)
+
         for i in range(2,47):
             if (i !=5 and i!=9 and i!=13):
                 self.Datatable.setColumnWidth(i,80)
@@ -50,6 +64,18 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.rdb3_end.setValidator(pDoubleValidator)
         self.rdb4_end.setValidator(pDoubleValidator)
 
+        pDoubleValidator2 = QDoubleValidator(self)
+        pDoubleValidator2.setRange(0,99)
+        pDoubleValidator2.setNotation(QDoubleValidator.StandardNotation)
+        pDoubleValidator2.setDecimals(5)
+
+
+
+        self.volumn1 = 0
+        self.volumn2 = 0
+        self.volumn3 = 0
+
+
 
         self.connection = pymysql.connect(host = '10.26.1.10',user ='root',password = 'root',db='chemistry',port = 3306,
     charset = 'utf8mb4',cursorclass = pymysql.cursors.DictCursor)
@@ -62,9 +88,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.rdb_exec.clicked.connect(self.run__pumb)
         self.rdb_clean.clicked.connect(self.clean_pumb)
         self.Data_reaction.clicked.connect(self.auto_reaction)
-
-
-
+        self.Data_added.clicked.connect(self.addtxt)
+        self.N_peizhi.clicked.connect(self.peizhi)
+        self.pb_fill.clicked.connect(self.fill)
+        self.pb_mix.clicked.connect(self.mix)
         #self.initialize()
 
 
@@ -142,7 +169,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         sql = "SELECT * FROM `反应全程` WHERE `实验编号` = `%s`" % self.Data_N_tv.text()
         print(sql)
 
-        
+
         with self.connection.cursor() as cursor:
             sql = "SELECT * FROM `反应全程` WHERE `实验编号` = '%s'" % self.Data_N_tv.text()
             cursor.execute(sql)
@@ -150,7 +177,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             if len(self.result2) == 0:
                 self.Datatable.setItem(0,1,QTableWidgetItem("无返回数据"))
-           
+
             for column_count in range(len(self.result2)):
 
                 a = list(self.result2[column_count].values())
@@ -158,8 +185,8 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                 for row_count in range(46):
 
                     self.Datatable.setItem(column_count,row_count,QTableWidgetItem(str(a[row_count])))
-        
-        
+
+
     def Rsearch(self):
 
         horizontalHeader = ["实验编号","泵0注入化学式","泵0浓度","注入体积","注入质量","泵1注入化学式","泵1浓度","注入体积","注入质量","泵2注入化学式","泵2浓度","注入体积","注入质量","泵3注入化学式","泵3浓度","注入体积","注入质量","步骤1名称","操作参数","时间min","步骤2名称","操作参数","时间min","步骤3名称","操作参数","时间min","步骤4名称","操作参数","时间min","步骤5名称","操作参数","时间min","步骤6名称","操作参数","时间min","步骤7名称","操作参数","时间min","步骤8名称","操作参数","时间min","步骤9名称","操作参数","时间min","步骤10名称","操作参数","时间min"]
@@ -169,7 +196,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             for k in range(47):
                 self.Datatable.setItem(i,k,QTableWidgetItem(""))
 
-        
+
         with self.connection.cursor() as cursor:
             sql = "SELECT * FROM `反应全程` WHERE `泵0注入化学式` LIKE '%%%s%%' OR `泵1注入化学式` LIKE '%%%s%%' OR `泵2注入化学式` LIKE '%%%s%%' OR `泵3注入化学式` LIKE '%%%s%%' " % (self.Data_R_tx.text(),self.Data_R_tx.text(),self.Data_R_tx.text(),self.Data_R_tx.text())
             cursor.execute(sql)
@@ -177,7 +204,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             if len(self.result3) == 0:
                 self.Datatable.setItem(0,1,QTableWidgetItem("无返回数据"))
-           
+
             for column_count in range(len(self.result3)):
 
                 a = list(self.result3[column_count].values())
@@ -298,7 +325,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         ser = self.open_pump_serial()
         startlist = [self.rdb1_start.text(),self.rdb2_start.text(),self.rdb3_start.text(),self.rdb4_start.text()]
         endlist = [self.rdb1_end.text(),self.rdb2_end.text(),self.rdb3_end.text(),self.rdb4_end.text()]
-        
+
         for i in range(0, 4):
             if (len(startlist[i]) != 0) and (len(endlist[i]) != 0):
                 time.sleep(0.1)
@@ -309,23 +336,22 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                     return
                 else:
                     time1 = rdbend - rdbstart
-                    order = '#p%d%03d%03d' % (i + 1, int(rdbstart * 10), int(time1 * 10))
+                    order = '#p%d%03d%03d' % (i + 1, int(rdbstart * 10), int(time1))
                     # order = "#p"+str(i+1)+str(rdbstart*10)+str(int(time1*10))
                     print(order)
                     result = ser.write(order.encode("gb2312"))
                     time.sleep(0.1)
                     result1 = ser.write(order.encode("gb2312"))
-                    print(result1)
-                    print("写字节总数：", result) 
+                    print("写字节总数：", result)
 
             elif (len(self.rdb1_end.text()) == 0) and (len(self.rdb1_start.text()) != 0):
                 time.sleep(0.1)
                 rdb1start = float(self.rdb1_start.text())
-                order = "#p"+str(i) + str(rdb1start)+str(999)
+                order = '#p%d%03d%03d' % (i + 1, int(rdbstart * 10), 99)
                 result = ser.write(order.encode("gb2312"))
                 time.sleep(0.1)
                 result1 = ser.write(order.encode("gb2312"))
-                print("写字节总数：", result) 
+                print("写字节总数：", result)
 
 
     def clean_pumb(self):
@@ -358,15 +384,82 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
 
             print(a[3])
             ser = self.open_pump_serial()
-            order = "#p1000%03d" % (a[3] * int(10))
+            order = "#p1000%03d" % (a[3])
             order2 = "#"
             result2 = ser.write(order.encode("gb2312"))
             time.sleep(0.1)
             result3 = ser.write(order.encode("gb2312"))
             time.sleep(0.1)
 
+
+    def addtxt(self):
+        fileName_choose, filetype = QFileDialog.getOpenFileName(self,  "选取文件", ""# 起始路径
+                                    "*.txt")   # 设置文件扩展名过滤,用双分号间隔
+
+        if fileName_choose == "":
+            print("\n取消选择")
+            return
+
+        print(run(fileName_choose))
+
+    def peizhi(self):
+        with self.connection.cursor() as cursor:
+            sql = "SELECT * FROM `反应全程` WHERE `实验编号` = '%s'" % self.Data_peizhi.text()
+            cursor.execute(sql)
+            result = cursor.fetchall()
+            a = list(result[0].values())
+            self.req1.setText(a[2])
+            self.req2.setText(a[6])
+            self.req3.setText(a[10])
+
+            self.volumn1 = a[3]
+            self.volumn2 = a[7]
+            self.volumn3 = a[11]
+
+
+    def mix(self):
+        ser = self.open_pump_serial()
+        if self.volumn1 != None:
+            order1 = '#p2000%03d' % (self.volumn1*2.6)
+            result = ser.write(order1.encode("gb2312"))
+            time.sleep(0.1)
+            result1 = ser.write(order1.encode("gb2312"))
+            print(result1)
+            #print(order1)
+
+        if self.volumn2 != None:
+            order2 = '#p3000%03d' % (self.volumn2*2.6)
+            result = ser.write(order2.encode("gb2312"))
+            time.sleep(0.1)
+            result1 = ser.write(order2.encode("gb2312"))
+            #print(order2)
+
+        if self.volumn3 != None:
+            order3 = '#p4000%03d' % (self.volumn3*2.6)
+            result = ser.write(order3.encode("gb2312"))
+            time.sleep(0.1)
+            result1 = ser.write(order3.encode("gb2312"))
+            #print(order3)
+
+    def fill(self):
+        ser = self.open_pump_serial()
+        order1 = '#p2000030'
+        result = ser.write(order1.encode("gb2312"))
+        time.sleep(0.1)
+        result1 = ser.write(order1.encode("gb2312"))
+        print(result1)
+
+        order2 = '#p3000030'
+        result = ser.write(order2.encode("gb2312"))
+        time.sleep(0.1)
+        result1 = ser.write(order2.encode("gb2312"))
+        order3 = '#p4000030'
+        result = ser.write(order3.encode("gb2312"))
+        time.sleep(0.1)
+        result1 = ser.write(order3.encode("gb2312"))
+
 if __name__ == "__main__":
-    
+
     app = QApplication(sys.argv)
     myWin = MyMainWindow()
     myWin.show()

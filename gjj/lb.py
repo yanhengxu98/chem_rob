@@ -315,6 +315,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
                     result = ser.write(order.encode("gb2312"))
                     time.sleep(0.1)
                     result1 = ser.write(order.encode("gb2312"))
+                    print(result1)
                     print("写字节总数：", result) 
 
             elif (len(self.rdb1_end.text()) == 0) and (len(self.rdb1_start.text()) != 0):

@@ -33,10 +33,10 @@ u16 static Pump_2_starter;
 u16 static Pump_3_starter; 
 u16 static Pump_4_starter;
 
-u16 static Pump_1_timer;
-u16 static Pump_2_timer; 
-u16 static Pump_3_timer; 
-u16 static Pump_4_timer; // operate these 4 variables to measure time
+u32 static Pump_1_timer;
+u32 static Pump_2_timer; 
+u32 static Pump_3_timer; 
+u32 static Pump_4_timer; // operate these 4 variables to measure time
 
 u8 Pump_Jinyang_Flag;                        //  蠕动泵进样标志
 u8 System_Heat_Flag;                         //  系统加热标志  
@@ -187,51 +187,51 @@ void Receive_Process(void)
 					{
 						Pump_1_start_Flag=1;
 						Pump_1_starter = 0;
-						Pump_1_timer = 9999;
+						Pump_1_timer = 99999;
 					}	
 					
 					if(Usart1_Buffer[0]=='p' && Usart1_Buffer[1]=='2')
 					{
 						Pump_2_start_Flag=1;
 						Pump_2_starter = 0;
-						Pump_2_timer = 9999;
+						Pump_2_timer = 99999;
 					}	
 					
 					if(Usart1_Buffer[0]=='p' && Usart1_Buffer[1]=='3')
 					{
 						Pump_3_start_Flag=1;
 						Pump_3_starter = 0;
-						Pump_3_timer = 9999;
+						Pump_3_timer = 99999;
 					}	
 					
 					if(Usart1_Buffer[0]=='p' && Usart1_Buffer[1]=='4')
 					{
 						Pump_4_start_Flag=1;
 						Pump_4_starter = 0;
-						Pump_4_timer = 9999;
+						Pump_4_timer = 99999;
 					}
 					
 					if(Usart1_Buffer[0]=='s' && Usart1_Buffer[1]=='1')
 					{
 						Pump_1_start_Flag=2;
-						Pump_1_timer = 9999;
+						Pump_1_timer = 99999;
 
 					}
 					if(Usart1_Buffer[0]=='s' && Usart1_Buffer[1]=='2')
 					{
 						Pump_2_start_Flag=2;
-						Pump_2_timer = 9999;
+						Pump_2_timer = 99999;
 
 					}
 					if(Usart1_Buffer[0]=='s' && Usart1_Buffer[1]=='3')
 					{
 						Pump_3_start_Flag=2;
-						Pump_3_timer = 9999;
+						Pump_3_timer = 99999;
 					}
 					if(Usart1_Buffer[0]=='s' && Usart1_Buffer[1]=='4')
 					{
 						Pump_4_start_Flag=2;
-						Pump_4_timer = 9999;
+						Pump_4_timer = 99999;
 					}
 					
 					if(Usart1_Buffer[0]=='u' && Usart1_Buffer[1]=='v')      
@@ -343,30 +343,30 @@ void Receive_Process(void)
 							if(Usart1_Buffer[1]=='p' && Usart1_Buffer[2]=='1')
 							{
 								Pump_1_start_Flag=1;
-								Pump_1_starter = 1000 * Start_Tenth_bit + 100 * Start_One_bit + 10 * Start_Point_bit;
-								Pump_1_timer = 1000 * Tenth_bit + 100 * One_bit + 10 * Point_bit;
+								Pump_1_starter = 10000 * Start_Tenth_bit + 1000 * Start_One_bit + 100 * Start_Point_bit;
+								Pump_1_timer = 10000 * Tenth_bit + 1000 * One_bit + 100 * Point_bit;
 							}	
 					
 							if(Usart1_Buffer[1]=='p' && Usart1_Buffer[2]=='2')
 							{
 								Pump_2_start_Flag=1;
-								Pump_2_starter = 1000 * Start_Tenth_bit + 100 * Start_One_bit + 10 * Start_Point_bit;
-								Pump_2_timer = 1000 * Tenth_bit + 100 * One_bit + 10 * Point_bit;
+								Pump_2_starter = 10000 * Start_Tenth_bit + 1000 * Start_One_bit + 100 * Start_Point_bit;
+								Pump_2_timer = 10000 * Tenth_bit + 1000 * One_bit + 100 * Point_bit;
 							}	
 					
 							if(Usart1_Buffer[1]=='p' && Usart1_Buffer[2]=='3')
 							{
 								Pump_3_start_Flag=1;
-								Pump_3_starter = 1000 * Start_Tenth_bit + 100 * Start_One_bit + 10 * Start_Point_bit;
-								Pump_3_timer = 1000 * Tenth_bit + 100 * One_bit + 10 * Point_bit;
+								Pump_3_starter = 10000 * Start_Tenth_bit + 1000 * Start_One_bit + 100 * Start_Point_bit;
+								Pump_3_timer = 10000 * Tenth_bit + 1000 * One_bit + 100 * Point_bit;
 
 							}
 							
 							if(Usart1_Buffer[1]=='p' && Usart1_Buffer[2]=='4')
 							{
 								Pump_4_start_Flag=1;
-								Pump_4_starter = 1000 * Start_Tenth_bit + 100 * Start_One_bit + 10 * Start_Point_bit;
-								Pump_4_timer = 1000 * Tenth_bit + 100 * One_bit + 10 * Point_bit;
+								Pump_4_starter = 10000 * Start_Tenth_bit + 1000 * Start_One_bit + 100 * Start_Point_bit;
+								Pump_4_timer = 10000 * Tenth_bit + 1000 * One_bit + 100 * Point_bit;
 							}									
 						}	
 					}		
@@ -674,7 +674,7 @@ void Pump_1_pumping(void)
 				  GPIO_ResetBits(GPIOF, GPIO_Pin_0);              
 					Pump_Jinyang_Count_1=0;
 				  Pump_1_start_Flag=0;
-					Pump_1_timer = 9999;
+					Pump_1_timer = 99999;
 			}
 			Timer10ms_Flag=0;
 		}
@@ -683,7 +683,7 @@ void Pump_1_pumping(void)
 			GPIO_ResetBits(GPIOF, GPIO_Pin_0);
 			Pump_Jinyang_Count_1=0;
 			Pump_1_start_Flag=0;
-			Pump_1_timer = 9999;
+			Pump_1_timer = 99999;
 			Pump_1_starter = 0;
 			Timer10ms_Flag=0;
 		}
@@ -706,7 +706,7 @@ void Pump_2_pumping(void)
 				  GPIO_ResetBits(GPIOF, GPIO_Pin_1);              
 					Pump_Jinyang_Count_2=0;
 				  Pump_2_start_Flag=0;
-					Pump_2_timer = 9999;
+					Pump_2_timer = 99999;
 			}
 			Timer10ms_Flag_2=0;
 		} 
@@ -716,7 +716,7 @@ void Pump_2_pumping(void)
 			GPIO_ResetBits(GPIOF, GPIO_Pin_1);
 			Pump_Jinyang_Count_2=0;
 			Pump_2_start_Flag=0;
-			Pump_2_timer = 9999;
+			Pump_2_timer = 99999;
 		  Pump_2_starter = 0;
 			Timer10ms_Flag_2=0;
 	}	
@@ -739,7 +739,7 @@ void Pump_3_pumping(void)               //  这里 最多需要完成 4 通道
 				  GPIO_ResetBits(GPIOF, GPIO_Pin_3);              
 					Pump_Jinyang_Count_3=0;
 				  Pump_3_start_Flag=0;
-					Pump_3_timer = 9999;
+					Pump_3_timer = 99999;
 			}
 			Timer10ms_Flag_3=0;
 			
@@ -748,7 +748,7 @@ void Pump_3_pumping(void)               //  这里 最多需要完成 4 通道
 			GPIO_ResetBits(GPIOF, GPIO_Pin_3);
 			Pump_Jinyang_Count_3=0;
 			Pump_3_start_Flag=0;
-			Pump_3_timer = 9999;
+			Pump_3_timer = 99999;
 			Pump_3_starter = 0;
 			Timer10ms_Flag_3=0;
 		}
@@ -773,7 +773,7 @@ void Pump_4_pumping(void)               //  这里 最多需要完成 4 通道
 				  GPIO_ResetBits(GPIOF, GPIO_Pin_2);              
 					Pump_Jinyang_Count_4=0;
 				  Pump_4_start_Flag=0;
-					Pump_4_timer = 9999;
+					Pump_4_timer = 99999;
 			}
 			Timer10ms_Flag_4=0;
 			
@@ -782,7 +782,7 @@ void Pump_4_pumping(void)               //  这里 最多需要完成 4 通道
 			GPIO_ResetBits(GPIOF, GPIO_Pin_2);
 			Pump_Jinyang_Count_4=0;
 			Pump_4_start_Flag=0;
-			Pump_4_timer = 9999;
+			Pump_4_timer = 99999;
 			Pump_4_starter = 0;
 			Timer10ms_Flag_4=0;
 		}

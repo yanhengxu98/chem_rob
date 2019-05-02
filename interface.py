@@ -281,7 +281,7 @@ class Ui_MainWindow(object):
         dest = self.horizontalSlider.value()
         count = self.horizontalSlider_2.value()
 
-        command = "\x02" + str(self.spinBox.value()) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+        command = "\x02" + str(self.spinBox.value() + 1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
             count) + "R" + "\x03"
         command += self.parity(command)
         return command

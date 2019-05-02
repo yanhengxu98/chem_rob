@@ -10,13 +10,14 @@ import serial
 import time
 import xlrd
 import xlwt
+
 '''
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
-from pdfminer.pdfparser import PDFPage'''
+from pdfminer.pdfparser import PDFPage
 from io import StringIO
-from Integrate import *
+from Integrate import *'''
 
 
 
@@ -45,6 +46,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         self.pump2.setValidator(self.xianzhi)
         self.pump3.setValidator(self.xianzhi)
         self.Data_peizhi.setValidator(self.xianzhi)
+
 
         for i in range(2,47):
             if (i !=5 and i!=9 and i!=13):
@@ -253,13 +255,13 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
             print("---异常---：", e)
 
     def generateInitializeCommand(self):
-        command = "\x02" + str(self.spinBox.value()) + "1" + "ZR" + "\x03"
-        print(self.spinBox.value())
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "ZR" + "\x03"
+        print(self.spinBox.value()+1)
         command += self.parity(command)
         return command
 
     def generateStopCommand(self):
-        command = "\x02" + str(self.spinBox.value()) + "1" + "T" + "\x03"
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "T" + "\x03"
         command += self.parity(command)
         return command
 
@@ -269,7 +271,7 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         dest = self.horizontalSlider.value()
         count = self.horizontalSlider_2.value()
 
-        command = "\x02" + str(self.spinBox.value()) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
+        command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
             count) + "R" + "\x03"
         command += self.parity(command)
         return command

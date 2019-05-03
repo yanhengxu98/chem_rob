@@ -36,7 +36,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -80,6 +80,9 @@
        </property>
       </widget>
       <widget class="QDial" name="dial">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>200</x>
@@ -89,23 +92,16 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>100</number>
        </property>
        <property name="maximum">
         <number>4000</number>
        </property>
        <property name="singleStep">
-        <number>200</number>
+        <number>100</number>
        </property>
-      </widget>
-      <widget class="QLCDNumber" name="lcdNumber">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>30</y>
-         <width>191</width>
-         <height>71</height>
-        </rect>
+       <property name="value">
+        <number>2000</number>
        </property>
       </widget>
       <widget class="QLabel" name="label_2">
@@ -134,6 +130,9 @@
        </property>
       </widget>
       <widget class="QDial" name="dial_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>210</x>
@@ -143,23 +142,16 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>100</number>
        </property>
        <property name="maximum">
         <number>4000</number>
        </property>
        <property name="singleStep">
-        <number>200</number>
+        <number>100</number>
        </property>
-      </widget>
-      <widget class="QLCDNumber" name="lcdNumber_2">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>150</y>
-         <width>191</width>
-         <height>71</height>
-        </rect>
+       <property name="value">
+        <number>2000</number>
        </property>
       </widget>
       <widget class="QLabel" name="label_3">
@@ -182,6 +174,9 @@
        </property>
       </widget>
       <widget class="QSlider" name="horizontalSlider">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>170</x>
@@ -191,23 +186,19 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>1</number>
+        <number>100</number>
        </property>
        <property name="maximum">
         <number>3000</number>
        </property>
+       <property name="singleStep">
+        <number>100</number>
+       </property>
+       <property name="value">
+        <number>1500</number>
+       </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLCDNumber" name="lcdNumber_3">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>270</y>
-         <width>191</width>
-         <height>71</height>
-        </rect>
        </property>
       </widget>
       <widget class="QLabel" name="label_4">
@@ -230,6 +221,9 @@
        </property>
       </widget>
       <widget class="QSlider" name="horizontalSlider_2">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>170</x>
@@ -246,16 +240,6 @@
        </property>
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-      <widget class="QLCDNumber" name="lcdNumber_4">
-       <property name="geometry">
-        <rect>
-         <x>420</x>
-         <y>390</y>
-         <width>191</width>
-         <height>71</height>
-        </rect>
        </property>
       </widget>
       <widget class="QPushButton" name="pushButton">
@@ -295,6 +279,118 @@
        </property>
        <property name="text">
         <string>执行</string>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="lcdNumber">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>31</y>
+         <width>191</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <number>5</number>
+       </property>
+       <property name="maximum">
+        <number>4000</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>2000</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="lcdNumber_2">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>140</y>
+         <width>191</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <number>5</number>
+       </property>
+       <property name="maximum">
+        <number>4000</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>2000</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="lcdNumber_3">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>270</y>
+         <width>191</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <number>5</number>
+       </property>
+       <property name="maximum">
+        <number>3000</number>
+       </property>
+       <property name="singleStep">
+        <number>5</number>
+       </property>
+       <property name="value">
+        <number>1500</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="lcdNumber_4">
+       <property name="geometry">
+        <rect>
+         <x>420</x>
+         <y>390</y>
+         <width>191</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial</family>
+         <pointsize>28</pointsize>
+        </font>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>30</number>
+       </property>
+       <property name="singleStep">
+        <number>1</number>
+       </property>
+       <property name="value">
+        <number>1</number>
        </property>
       </widget>
      </widget>
@@ -1057,7 +1153,7 @@
      <x>0</x>
      <y>0</y>
      <width>1178</width>
-     <height>26</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

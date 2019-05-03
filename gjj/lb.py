@@ -100,28 +100,28 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
   #  def findmt(self):
     # 设置LCD数字1
     def set_lcd_1(self):
-        self.lcdNumber.display(self.dial.value())
+        self.lcdNumber.setValue(self.dial.value())
     # 刻度盘信号槽1
     def set_dial_1(self):
         self.dial.valueChanged['int'].connect(self.set_lcd_1)
 
     # 设置LCD数字2
     def set_lcd_2(self):
-        self.lcdNumber_2.display(self.dial_2.value())
+        self.lcdNumber_2.setValue(self.dial_2.value())
     # 刻度盘信号槽2
     def set_dial_2(self):
         self.dial_2.valueChanged['int'].connect(self.set_lcd_2)
 
     # 设置LCD数字3
     def set_lcd_3(self):
-        self.lcdNumber_3.display(self.horizontalSlider.value())
+        self.lcdNumber_3.setValue(self.horizontalSlider.value())
     # 刻度盘信号槽3
     def set_dial_3(self):
         self.horizontalSlider.valueChanged['int'].connect(self.set_lcd_3)
 
     # 设置LCD数字3
     def set_lcd_4(self):
-        self.lcdNumber_4.display(self.horizontalSlider_2.value())
+        self.lcdNumber_4.setValue(self.horizontalSlider_2.value())
     # 刻度盘信号槽3
     def set_dial_4(self):
         self.horizontalSlider_2.valueChanged['int'].connect(self.set_lcd_4)
@@ -266,10 +266,10 @@ class MyMainWindow(QMainWindow, Ui_MainWindow):
         return command
 
     def generateExecuteCommand(self):
-        speed1 = self.dial.value()
-        speed2 = self.dial_2.value()
-        dest = self.horizontalSlider.value()
-        count = self.horizontalSlider_2.value()
+        speed1 = self.lcdNumber.value()
+        speed2 = self.lcdNumber_2.value()
+        dest = self.lcdNumber_3.value()
+        count = self.lcdNumber_4.value()
 
         command = "\x02" + str(self.spinBox.value()+1) + "1" + "gV" + str(speed1) + "IA" + str(dest) +  "OV" + str(speed2) + "A0G" + str(
             count) + "R" + "\x03"
